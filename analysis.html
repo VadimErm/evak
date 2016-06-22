@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Эвакуаторы</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js" ></script>
+   <script src="bower_components/Chart.js/dist/Chart.bundle.js"></script>
+   
+   
+  </head>
+  <body> 
+    <div class="container-fluid wrap">
+       <div class="row">
+           <div class="col-sm-12 col-md-12 header">
+             <div class="col-sm-3 col-md-2 logo-wrap">
+                 <a class="logo" href="#">Лого</a>  
+                          
+             </div> 
+             <div class="profile-menu">
+                     <ul class="nav navbar-nav">
+                        <li><a href="#">Администратор</a></li>
+                        <li><a href="#">Выход</a></li>
+                     </ul>                 
+                 </div>          
+          </div>       
+       </div>
+       <div class="row row-wrap">
+          <div class="col-sm-3 col-md-2 sidebar">
+             <ul class="nav nav-sidebar">
+                 <li ><a href="index.html">Эвакуаторы</a><span ></span></li>
+                 <li ><a href="drivers.html">Водители</a><span></span></li>
+                 <li><a href="orders.html">Заказы</a><span></span></li>
+                 <li class="on"><a href="analysis.html">Статистика</a><span class="triangle-right"></span></li>
+                 <li ><a href="archive.html">Архив</a><span ></span></li>
+             </ul>
+          </div>
+          <div class="col-sm-9  col-md-10 content">
+          <div class="col-sm-12 col-md-12 head"><h1>Статистика</h1></div>
+             <div class="col-sm-11 col-md-11">
+                <div class="panel">
+                 <div class="panel-heding">
+                    <div class="navbar dashbord">
+                        <div class="form-group period">        
+                           <select class="form-control period-select">
+                                
+                                
+                           </select>
+                        </div>
+                       
+                        <div class="input-group date-range">
+                            <label>или укажите вручную c:</label>
+                            <input type="text" class="form-control" id="min-date">
+                        </div>
+                       
+                        <div class="input-group date-range">
+                            <label>до:</label>
+                            <input type="text" class="form-control" id="max-date">
+                        </div>
+                        <div class="type-of-chart">
+                            <div class="radio ">
+                                 <label>
+                                      <input type="radio"  name="optionsRadios"  value="profit" checked >
+                                      Доход
+                                 </label>
+                            </div>
+                            <div class="radio ">
+                                 <label>
+                                      <input type="radio"   name="optionsRadios"  value="quantity">
+                                      Количество заказов
+                                 </label>
+                             </div>
+                        </div>
+                        
+                    </div>
+                    
+                 </div>
+                 <div class="panel-body">
+                    <canvas id="myChart"></canvas>
+                 </div>
+                 
+               </div>
+             </div>
+             
+          </div>
+       </div>    
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    
+    
+    
+    <script>
+       $(function () {
+                $('#min-date').datetimepicker().data("DateTimePicker").options({
+                     format: 'DD/MM/YYYY',
+                     viewMode: "months"
+                                   
+                });
+                $('#max-date').datetimepicker().data("DateTimePicker").options({
+                    format: 'DD/MM/YYYY',
+                    viewMode: "months"
+                                  
+                });
+                
+      });
+      // Диограмма
+      var ctx = $("#myChart"),
+          profitLabel = "Доход",
+          profitData = [25000, 24000, 35000, 28000, 30000],
+          quantityLabel = "Количество заказов",
+          quantityData = [100, 90, 150, 115, 130 ],
+             
+          ChartData = {
+               labels: ["Январь", "Февраль", "Март", "Июнь", "Июль"],
+               datasets: [{
+                    label: profitLabel,
+                    backgroundColor: "#3c8dbc",
+                    data: profitData
+               }]    
+          };
+ 
+     var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: ChartData,
+              options: {
+                   scales: {
+                        yAxes: [{
+                            ticks: {
+                                 beginAtZero:true
+                            }
+                       }]
+                   },
+                       
+                   legend: {
+                       display: true,
+                       labels: {
+                           fontColor: 'black'
+                                  
+                       }
+                   }
+             }
+    });
+    
+    $(".type-of-chart input").on("change", function () {
+    	   if (this.value == "quantity") {
+    	   	  myChart.data.datasets[0].label = quantityLabel;
+    	   	  myChart.data.datasets[0].data = quantityData;
+    	   	  myChart.update();
+    	   } else {
+    	   	  myChart.data.datasets[0].label =  profitLabel;
+    	   	  myChart.data.datasets[0].data = profitData;
+    	   	  myChart.update();
+    	   }
+    });   
+    $(document).ready(function () {
+         //Выбор временного периода 
+         moment.locale('ru', {
+                 months : [
+                   "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
+                    "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+                ]
+         });
+         var currentYear =moment().year(),
+             currentMonth = moment().month(),
+             select = getOptions(currentYear, currentMonth);       
+         
+         $(".period-select").on("change", function () {
+              var month,
+                  year,
+                  startDate,
+                  endDate; 
+         
+              if (this.value == "all" ) {
+              
+         	      
+                  $('#min-date').val(null);
+                  $('#max-date').val(null);
+                   
+             } else if(this.value == "currentMonth" ) {
+         	 
+         	      endDate = moment().format("DD/MM/YYYY");
+         	      month = moment().month();
+         	      year = moment().year();
+         	      startDate = moment([year, month]).format("DD/MM/YYYY"),
+                   
+                  $('#min-date').val(startDate);
+                  $('#max-date').val(endDate);
+                  
+             } else if (this.value == "currentYear") {
+             
+         	      endDate = moment().format("DD/MM/YYYY");
+         	      year = moment().year();
+         	      startDate = moment([year]).format("DD/MM/YYYY");
+         	      
+                  $('#min-date').val(startDate);
+                  $('#max-date').val(endDate);
+                  
+             }  else {
+             
+                  month = Number(this.value.substring(0,2))-1;
+                  year = Number(this.value.substring(3));
+                  startDate = moment([year, month]).format("DD/MM/YYYY");
+                  endDate = moment([year, month]).endOf("month").format("DD/MM/YYYY");   
+                  
+                  $('#min-date').val(startDate);
+                  $('#max-date').val(endDate);
+         	
+             }
+                	 
+         });
+ 
+         function getLastSixMonths(currentYear, currentMonth) {
+             
+             var  sixMonthsBefore = currentMonth -6,
+                  monthsString = "";
+
+             for (var i= currentMonth-1; i>=sixMonthsBefore; i--) {
+             	   
+             	   if (i>=0) {
+             	   	monthsString += "<option value=\""+moment([currentYear, i]).format("MM YYYY")+"\">"+moment([currentYear, i]).format("MMMM YYYY")+"</option>\n";
+             	   } else if(i<0) {
+             	   	monthsString += "<option value=\""+moment([currentYear-1, 12-Math.abs(i)]).format("MM YYYY")+"\">"+moment([currentYear-1, 12-Math.abs(i)]).format("MMMM YYYY")+"</option>\n";
+             	   }
+
+             }
+         	 return monthsString;
+         }
+         function getOptions(currentYear, currentMonth) {
+         	var options = "";
+         	options += "<option value=\"all\">Выберите период</option>";
+         	options += "<option value=\"currentMonth\">Текущий месяц ("+moment([currentYear, currentMonth]).format("MMMM YYYY")+")</option>\n";
+         	options += "<option value=\"currentYear\">Текущий год ("+currentYear+")</option>\n";
+         	options += getLastSixMonths(currentYear, currentMonth);
+         	
+         	return options;
+         }
+         
+         $(".period-select").html(select);
+         
+         
+         //Переключатель графика
+               
+         
+    	
+    });
+    </script>
+     
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+   
+    <script src="bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+    
+  </body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Эвакуаторы</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+   <script src="bower_components/moment/min/moment.min.js"></script>
+   <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+   <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+   <script>  
+  //Плагин "фильтр статусов"
+    $.fn.dataTable.ext.search.push(function ( settings, data, dataIndex ) {
+         var status = $(".status select").val(),
+             orderStatus = data[4];
+         
+         if (status == orderStatus || status == "all") {
+             
+             return true;
+         	
+         }
+                  
+         return false;
+    	
+    });
+    
+    //Снимаем выделение при клике вне строки таблицы     
+    
+    $(document).ready(function () { 
+         // Сортируемая таблица    
+         var table =  $('.table-cars').DataTable({
+                  "sDom": 'rt'         
+         });  
+         
+         //Фильтр статусов
+         $(".status select").change(function () {
+             table.draw();
+         	 
+         });
+   });
+  </script>
+  </head>
+  <body>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="newModal">
+       <div class="modal-dialog">
+          <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">Новый эвакуатор</h4>
+             </div>
+             <div class="modal-body">
+                 <div class="row">
+                     <div class="col-md-6 col-sm-6">
+                        <img src="images/mercedes.jpg" class="img-responsive img-thumbnail" id="car-foto" alt="">
+                        <form>    
+                            <div class="file_upload" >
+                                <button type="button" class="btn btn-default" >Загрузить фото</button>
+                                <div>Файл не выбран</div>
+                                <input type="file" id="input-car-foto">
+                            </div>
+                        </form>
+                     </div>
+                     <div class="col-md-6 col-sm-6">
+                        <form id="car-form">
+                              
+                                 <div class="form-group">
+                                     
+                                      <label>Модель</label>
+                                      <input type="text" class="form-control">
+                                    
+                                 </div>
+                                 <div class="form-group">
+                                      <label>Год выпуска</label>
+                                      <input type="text" class="form-control" id="datetimepicker1" >     
+                                 </div>
+                                 <div class="form-group">
+                                      <label>Госномер</label>
+                                      <input type="text" class="form-control">
+                                 </div>
+                                  <div class="form-group">
+                                      <label>Водитель</label>
+                                      <select class="form-control">
+                                          <option>Иванов В.В.</option>
+                                          <option>Сидоров В.В.</option>
+                                          <option>Клименко В.В.</option>
+                                          <option>Николенко В.В.</option>
+                                      </select>
+                                 </div>    
+                        </form>
+                        
+                     </div>
+                 </div>
+                 <div class="row tech">
+                     <h5>Технические характеристики</h5>
+                     <div class="col-md-12 characteristic">                          
+                         <div class="col-md-6 col-sm-6 characteristic-column">
+                            <div class="form-group">       
+                                  <label>Двигатель</label>
+                                  <input type="text" class="form-control" form="car-form">        
+                            </div>
+                            <div class="form-group">       
+                                  <label>Пробег</label>
+                                  <input type="text" class="form-control" form="car-form">        
+                            </div>
+                            <div class="form-group">       
+                                  <label>Грузоподъемность</label>
+                                  <input type="text" class="form-control" form="car-form">        
+                            </div>
+                         </div>
+                         <div class="col-md-6 col-sm-6 characteristic-column">
+                            <div class="form-group">       
+                                  <label>Дата ТО</label>
+                                  <input type="text" class="form-control" form="car-form" id="datetimepicker2">        
+                            </div>
+                            <div class="form-group">       
+                                  <label>Коментарии</label>
+                                  <textarea  class="form-control" form="car-form" rows="5"></textarea>        
+                            </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                 <button type="button" class="btn btn-primary">Сохранить</button>
+             </div>
+          </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit" id="editModal">
+       <div class="modal-dialog">
+          <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">Редактировать</h4>
+             </div>
+             <div class="modal-body">
+                 <div class="row">
+                     <div class="col-md-6 col-sm-6">
+                        <img src="images/mercedes.jpg" class="img-responsive img-thumbnail" id="car-foto" alt="">
+                        <form>    
+                            <div class="file_upload" >
+                                <button type="button" class="btn btn-default" >Загрузить фото</button>
+                                <div>Файл не выбран</div>
+                                <input type="file" id="input-car-foto">
+                            </div>
+                        </form>
+                     </div>
+                     <div class="col-md-6 col-sm-6">
+                        <form id="car-form">
+                              
+                                 <div class="form-group">
+                                     
+                                      <label>Модель</label>
+                                      <input type="text" class="form-control" value="Mercedes">
+                                    
+                                 </div>
+                                 <div class="form-group">
+                                      <label>Год выпуска</label>
+                                      <input type="text" class="form-control" id="datetimepicker3" >     
+                                 </div>
+                                 <div class="form-group">
+                                      <label>Госномер</label>
+                                      <input type="text" class="form-control" value="CA4354AA">
+                                 </div>
+                                  <div class="form-group">
+                                      <label>Водитель</label>
+                                      <select class="form-control">
+                                          <option>Иванов В.В.</option>
+                                          <option>Сидоров В.В.</option>
+                                          <option>Клименко В.В.</option>
+                                          <option>Николенко В.В.</option>
+                                      </select>
+                                 </div>
+                        </form>
+                     </div>
+                 </div>
+                 <div class="row tech">
+                     
+                     <h5>Технические характеристики</h5>
+                     <div class="col-md-12 characteristic">                          
+                         <div class="col-md-6 col-sm-6 characteristic-column">
+                            <div class="form-group">       
+                                  <label>Двигатель</label>
+                                  <input type="text" class="form-control" form="car-form" value="Дизель, 3,6 л">        
+                            </div>
+                            <div class="form-group">       
+                                  <label>Пробег</label>
+                                  <input type="text" class="form-control" form="car-form" value="140 тыс.км">        
+                            </div>
+                            <div class="form-group">       
+                                  <label>Грузоподъемность</label>
+                                  <input type="text" class="form-control" form="car-form" value="2 т">        
+                            </div>
+                         </div>
+                         <div class="col-md-6 col-sm-6 characteristic-column">
+                            <div class="form-group">       
+                                  <label>Дата ТО</label>
+                                  <input type="text" class="form-control" form="car-form" id="datetimepicker4">        
+                            </div>
+                            <div class="form-group">       
+                                  <label>Коментарии</label>
+                                  <textarea  class="form-control" form="car-form" rows="5" >Вмятина на правом крыле</textarea>        
+                            </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                 <button type="button" class="btn btn-primary">Сохранить</button>
+             </div>
+          </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="driverModal" id="driverModal">
+       <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">Назначить водителя</h4>
+             </div>
+             <div class="modal-body">
+                <form>
+                    <div class="form-group">        
+                        <select class="form-control">
+                             <option>Иванов В.В.</option>
+                             <option>Сидоров В.В.</option>
+                             <option>Клименко В.В.</option>
+                             <option>Николенко В.В.</option>
+                        </select>
+                     </div>
+                </form>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                 <button type="button" class="btn btn-primary">Сохранить</button>
+             </div>
+          </div>
+       </div>
+    </div>
+    <div class="container-fluid wrap">
+       <div class="row">
+           <div class="col-sm-12 col-md-12 header">
+             <div class="col-sm-3 col-md-2 logo-wrap">
+                 <a class="logo" href="#">Лого</a>  
+                          
+             </div> 
+             <div class="profile-menu">
+                     <ul class="nav navbar-nav">
+                        <li><a href="#">Администратор</a></li>
+                        <li><a href="#">Выход</a></li>
+                     </ul>                 
+                 </div>          
+          </div>       
+       </div>
+       <div class="row row-wrap">
+          <div class="col-sm-3 col-md-2 sidebar">
+             <ul class="nav nav-sidebar">
+                 <li class="on"><a href="index.html">Эвакуаторы</a><span class="triangle-right"></span></li>
+                 <li><a href="drivers.html">Водители</a><span></span></li>
+                 <li><a href="orders.html">Заказы</a><span></span></li>
+                 <li><a href="analysis.html">Статистика</a><span></span></li>
+                 <li><a href="archive.html">Архив</a><span></span></li>
+             </ul>
+          </div>
+          <div class="col-sm-9  col-md-10 content">
+          <div class="col-sm-12 col-md-12 head"><h1>Эвакуаторы</h1></div>
+             <div class="col-sm-6 col-md-7">
+                <div class="panel">
+                 <div class="panel-heding">
+                    <div class="navbar dashbord">
+                        <ul class="nav navbar-nav">
+                            <li data-toggle="popover" data-placement="top" data-content="Новый" data-trigger="hover" ><button type="button" class="btn btn-default" id="newButton" data-container="body"   data-toggle="modal" data-target="#newModal"> <span class="glyphicon glyphicon-plus"></span></button></li>
+                            <li data-toggle="popover" data-placement="top" data-content="Редактировать" data-trigger="hover"><button type="button" class="btn btn-default"  data-container="body" data-toggle="modal" data-target="#editModal" disabled="disabled" > <span class="glyphicon glyphicon-pencil"></span></button></li>
+                            <li data-toggle="popover" data-placement="top" data-content="Удалить" data-trigger="hover"><button type="button" class="btn btn-default"  data-container="body" disabled="disabled" > <span class="glyphicon glyphicon-trash"></span></button></li>
+                            <li data-toggle="popover" data-placement="top" data-content="Назначить водителя" data-trigger="hover"><button type="button" class="btn btn-default"  data-container="body" data-toggle="modal" data-target="#driverModal" disabled="disabled" > <span class="glyphicon glyphicon-user"></span></button></li>
+                        </ul>
+                        <div class="input-group status">
+                             <select class="form-control">
+                                 <option value="all">Выбирите статус</option>
+                                 <option value="Работает">Работает</option>
+                                 <option value="Свободен">Свободен</option>
+                                 <option value="ТО">ТО</option>
+                             </select>
+                        </div>
+                    </div>
+                 </div>
+                 <div class="table-responsive">
+                    <table class="table   table-cars">
+                       <thead>
+                          <tr>
+                             <th>№</th>
+                             <th>Модель</th>
+                             <th>Госномер</th>
+                             <th>Водитель</th>
+                             <th>Статус</th>
+                          </tr>                    
+                       </thead> 
+                       <tbody>
+                          <tr data-car-id="id124">
+                             <td>124</td>
+                             <td>Mercedes</td>
+                             <td>CA5632AA</td>
+                             <td>Иванов В.В.</td>
+                             <td>Работает</td>
+                             
+                          </tr>  
+                          <tr data-car-id="id125">
+                             <td>125</td>
+                             <td>MAN</td>
+                             <td>CA5632AA</td>
+                             <td>Иванов В.В.</td>
+                             <td>Работает</td>
+                          </tr>  
+                          <tr data-car-id="id126">
+                             <td>126</td>
+                             <td>Opel</td>
+                             <td>CA5632AA</td>
+                             <td>Иванов В.В.</td>
+                             <td>Свободен</td>
+                          </tr>  
+                          <tr data-car-id="id127">
+                             <td>127</td>
+                             <td>Iveco</td>
+                             <td>CA5632AA</td>
+                             <td>Иванов В.В.</td>
+                             <td>ТО</td>
+                          </tr>                   
+                       </tbody>
+                    </table>
+                 </div>
+               </div>
+             </div>
+             <div class="col-sm-5 col-md-5 car-info" id="id124">
+                <div class="button-close"></div>
+                <div class="clearfix">
+                  <div class="col-sm-6 col-md-6 car-img">
+                    <img src="images/mercedes.jpg" class="img-responsive img-thumbnail" alt="">
+                  </div>
+                  <div class="col-sm-6 col-md-6 car-info-name">
+                     <h4>Mercedes</h4>
+                     <p>2000 г.в.</p>
+                     <p>CA2653AA</p>
+                     <p>Водитель: Иванов В.В.</p>
+                  </div>
+                </div>
+                  <div class="col-sm-12 col-md-12 car-info-tech">
+                     <h4>Технические характеристики</h4>
+                     <dl>
+                        <dd>
+                            <span class="car-label">Дигатель:</span>
+                            <span class="argument">4,6 л Дизель</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Грузоподъемность:</span>
+                            <span class="argument">2 т</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Пробег:</span>
+                            <span class="argument">140 тыс.км.</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Дата последнего ТО:</span>
+                            <span class="argument">01.01.2016</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Прочее:</span>
+                            <span class="argument">вмятина на правом крыле</span>                        
+                        </dd>                     
+                     </dl>
+                  </div>
+             </div>
+             <div class="col-sm-5 col-md-5 car-info" id="id125">
+                <div class="button-close"></div>
+                <div class="clearfix">
+                  <div class="col-sm-6 col-md-6 car-img">
+                    <img src="images/man200x150.jpg" class="img-responsive img-thumbnail" alt="">
+                  </div>
+                  <div class="col-sm-6 col-md-6 car-info-name">
+                     <h4>MAN 14.163</h4>
+                     <p>2000 г.в.</p>
+                     <p>CA2653AA</p>
+                     <p>Водитель: Иванов В.В.</p>
+                  </div>
+                </div>
+                  <div class="col-sm-12 col-md-12 car-info-tech">
+                     <h4>Технические характеристики</h4>
+                     <dl>
+                        <dd>
+                            <span class="car-label">Дигатель:</span>
+                            <span class="argument">4,6 л Дизель</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Грузоподъемность:</span>
+                            <span class="argument">2 т</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Пробег:</span>
+                            <span class="argument">140 тыс.км.</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Дата последнего ТО:</span>
+                            <span class="argument">01.01.2016</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Прочее:</span>
+                            <span class="argument">вмятина на правом крыле</span>                        
+                        </dd>                     
+                     </dl>
+                  </div>
+             </div>
+             <div class="col-sm-5 col-md-5 car-info" id="id126">
+                <div class="button-close"></div>
+                <div class="clearfix">
+                  <div class="col-sm-6 col-md-6 car-img">
+                    <img src="images/opel.jpg" class="img-responsive img-thumbnail" alt="">
+                  </div>
+                  <div class="col-sm-6 col-md-6 car-info-name">
+                     <h4>Opel</h4>
+                     <p>2000 г.в.</p>
+                     <p>CA2653AA</p>
+                     <p>Водитель: Иванов В.В.</p>
+                  </div>
+                </div>
+                  <div class="col-sm-12 col-md-12 car-info-tech">
+                     <h4>Технические характеристики</h4>
+                     <dl>
+                        <dd>
+                            <span class="car-label">Дигатель:</span>
+                            <span class="argument">4,6 л Дизель</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Грузоподъемность:</span>
+                            <span class="argument">2 т</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Пробег:</span>
+                            <span class="argument">140 тыс.км.</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Дата последнего ТО:</span>
+                            <span class="argument">01.01.2016</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Прочее:</span>
+                            <span class="argument">вмятина на правом крыле</span>                        
+                        </dd>                     
+                     </dl>
+                  </div>
+             </div>
+             <div class="col-sm-5 col-md-5 car-info " id="id127">
+                <div class="button-close"></div>
+                <div class="clearfix">
+                  <div class="col-sm-6 col-md-6 car-img">
+                    <img src="images/iveco.jpg" class="img-responsive img-thumbnail" alt="">
+                  </div>
+                  <div class="col-sm-6 col-md-6 car-info-name">
+                     <h4>Iveco</h4>
+                     <p>2000 г.в.</p>
+                     <p>CA2653AA</p>
+                     <p>Водитель: Иванов В.В.</p>
+                  </div>
+                </div>
+                  <div class="col-sm-12 col-md-12 car-info-tech">
+                     <h4>Технические характеристики</h4>
+                     <dSets thel>
+                        <dd>
+                            <span class="car-label">Дигатель:</span>
+                            <span class="argument">4,6 л Дизель</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Грузоподъемность:</span>
+                            <span class="argument">2 т</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Пробег:</span>
+                            <span class="argument">140 тыс.км.</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Дата последнего ТО:</span>
+                            <span class="argument">01.01.2016</span>                        
+                        </dd>
+                        <dd>
+                            <span  class="car-label">Прочее:</span>
+                            <span class="argument">вмятина на правом крыле</span>                        
+                        </dd>                     
+                     </dl>
+                  </div>
+             </div>
+          </div>
+       </div>    
+    </div>
+
+    
+    <script>
+    $(document).ready(function () {
+         $(".nav-sidebar li").click(function () {
+               $(".nav-sidebar li.on span").removeClass("triangle-right");
+               $(".nav-sidebar li.on").removeClass("on");
+               $(this).addClass("on");
+               $(this).children("span").addClass("triangle-right");
+         	
+         });
+         $(".table-cars tbody tr").click(function () {
+              $(".table-cars tbody tr.active-row").removeClass("active-row");
+              $(".content .show").removeClass("show");
+              $(this).addClass("active-row");
+              var id = $(this).attr("data-car-id");
+              var selector = "#"+id;
+              $(selector).addClass("show"); 
+              $("#newButton").parent().nextAll().find("button").removeAttr("disabled");
+         });
+         $(".button-close").click(function () {
+              $(".car-info").removeClass("show");
+         	  $(".table-cars tbody tr.active-row").removeClass("active-row");
+         	  $("#newButton").parent().nextAll().find("button").attr("disabled", "disabled" );
+         });
+         $('[data-toggle="popover"]').popover();
+         $('#myModal').on('shown.bs.modal', function () {
+              $('#myInput').focus();
+         });
+        
+         
+    	
+    });
+    </script>
+    <!-- Upload image -->
+    <script>
+    $(function(){
+    var wrapper = $( ".file_upload" ),
+        inp = wrapper.find( "input" ),
+        btn = wrapper.find( "button" ),
+        lbl = wrapper.find( "div" );
+        
+
+    // Crutches for the :focus style:
+    btn.focus(function(){
+        wrapper.addClass( "focus" );
+    }).blur(function(){
+        wrapper.removeClass( "focus" );
+    });
+
+    // Yep, it works!
+    btn.add( lbl ).click(function(){
+        inp.click();
+    });
+
+    var file_api = ( window.File && window.FileReader && window.FileList && window.Blob ) ? true : false;
+
+    inp.change(function(){
+  
+        var file_name;
+        
+            
+        if( file_api && inp[ 0 ].files[ 0 ] )
+            file_name = inp[ 0 ].files[ 0 ].name;
+        else
+            file_name = inp.val().replace( "C:\\fakepath\\", '' );
+        if( ! file_name.length )
+            return;
+
+        if( lbl.is( ":visible" ) ){
+            lbl.text( file_name );
+            btn.text( "Выбрать" );
+        }else {
+            btn.text( file_name );
+            }
+       
+        }).change();
+        
+        
+        
+
+    });
+    $( window ).resize(function(){
+          $( ".file_upload input" ).triggerHandler( "change" );
+    });$
+    
+    
+    </script>
+     <script>
+            $(function () {
+                $('#datetimepicker1').datetimepicker().data("DateTimePicker").options({
+                     format: 'YYYY',
+                                   
+                });
+                $('#datetimepicker2').datetimepicker().data("DateTimePicker").options({
+                    format: 'DD/MM/YYYY',
+                                  
+                });
+                $('#datetimepicker3').datetimepicker().data("DateTimePicker").options({
+                     format: 'YYYY',
+                     defaultDate: '1998',
+                                   
+                });
+                $('#datetimepicker4').datetimepicker().data("DateTimePicker").options({
+                    format: 'DD/MM/YYYY',
+                    defaultDate: '01/01/2015',
+                                  
+                });
+            });
+             
+     </script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="bower_components/moment/min/moment.min.js"></script>
+    <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+  </body>
+</html>
